@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import pl.michal.clinical_nutrition.auth.config.JwtTokenUtil;
 import pl.michal.clinical_nutrition.auth.entity.User;
 import pl.michal.clinical_nutrition.auth.repository.UserRepository;
 
@@ -22,6 +23,8 @@ public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
     @Autowired
     private PasswordEncoder bcryptEncoder;
+    @Autowired
+    private JwtTokenUtil jwtTokenUtil;
 
 
 
@@ -31,6 +34,14 @@ public class UserService implements UserDetailsService {
 
     public Optional<User> findById(Long id) {
         return userRepository.findById(id);
+    }
+
+
+    public User findByToken(String token) {
+
+        System.out.println(jwtTokenUtil.getExpirationDateFromToken(token));
+        return userRepository.findByUsername(jwtTokenUtil.getUsernameFromToken(token));
+
     }
 
 
