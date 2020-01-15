@@ -24,9 +24,9 @@ public class Pomiar {
     private double wzrost;
     @Column(nullable = false)
     private double temperatura;
-    @Enumerated(EnumType.ORDINAL)
+    @Enumerated(EnumType.STRING)
     private Aktywnosc aktywnosc;
-    @Enumerated(EnumType.ORDINAL)
+    @Enumerated(EnumType.STRING)
     private StanChorego stanChorego;
     @Column
     private Date dataPomiaru;
