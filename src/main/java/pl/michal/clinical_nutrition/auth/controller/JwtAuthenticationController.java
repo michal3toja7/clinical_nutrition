@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import pl.michal.clinical_nutrition.auth.entity.User;
 import pl.michal.clinical_nutrition.auth.mapper.UserMapper;
 
 
@@ -22,6 +23,8 @@ import pl.michal.clinical_nutrition.auth.dto.JwtRequest;
 import pl.michal.clinical_nutrition.auth.dto.JwtResponse;
 import pl.michal.clinical_nutrition.auth.dto.UserDTO;
 import pl.michal.clinical_nutrition.auth.service.UserService;
+
+import java.util.Optional;
 
 
 @RequiredArgsConstructor
@@ -43,19 +46,20 @@ public class JwtAuthenticationController {
 
 
 
-    @RequestMapping(value = "/authenticate", method = RequestMethod.POST)
+    @RequestMapping(value = "/api/authenticate", method = RequestMethod.POST)
     public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws Exception {
-
         authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
+        UserDTO userDTO = userMapper.toUserDTO(userService.findByUsername(authenticationRequest.getUsername()));
 
         final UserDetails userDetails = userService
                 .loadUserByUsername(authenticationRequest.getUsername());
 
         final String token = jwtTokenUtil.generateToken(userDetails);
-
-        return ResponseEntity.ok(new JwtResponse(token));
+        userDTO.setToken(token);
+        System.out.println(jwtTokenUtil.getExpirationDateFromToken(token));
+        return ResponseEntity.status(HttpStatus.OK).body(userDTO);
+                //status(HttpStatus.OK).body(token+userMapper.toUserDTO((user)));
     }
-
 
     private void authenticate(String username, String password) throws Exception {
         try {

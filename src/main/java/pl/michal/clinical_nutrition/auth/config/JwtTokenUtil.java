@@ -19,7 +19,8 @@ public class JwtTokenUtil implements Serializable {
 
     private static final long serialVersionUID = -2550185165626007488L;
 
-    public static final long JWT_TOKEN_VALIDITY = 5 * 60 * 60;
+    //60 sekund * 60 minut * 1 godzina
+    public static final long JWT_TOKEN_VALIDITY = 30 * 60;
 
     @Value("${jwt.secret}")
     private String secret;
@@ -32,6 +33,10 @@ public class JwtTokenUtil implements Serializable {
     //retrieve expiration date from jwt token
     public Date getExpirationDateFromToken(String token) {
         return getClaimFromToken(token, Claims::getExpiration);
+    }
+
+    public void setExpirationDateFromToken(String token) {
+        getAllClaimsFromToken(token).setExpiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY * 1000));
     }
 
     public <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {

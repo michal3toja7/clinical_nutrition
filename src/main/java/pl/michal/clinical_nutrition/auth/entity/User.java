@@ -19,9 +19,9 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @Column (unique = true)
+    @Column (unique = true, nullable = false)
     private String username;
-    @Column
+    @Column (nullable = false)
     @JsonIgnore
     private String password;
     @Column
@@ -30,9 +30,9 @@ public class User {
     @Column
     @UpdateTimestamp
     private Date updated_on;
-    @Column
+    @Column (nullable = false)
     private String imiona;
-    @Column
+    @Column (nullable = false)
     private String nazwisko;
     @Column (nullable = false)
     @Type(type = "yes_no")
@@ -40,7 +40,7 @@ public class User {
     @Column
     private String rodzaj_personelu;
     @Column
-    private int pesel;
+    private long pesel;
     @Column
     private String NPWZ;
     @Column

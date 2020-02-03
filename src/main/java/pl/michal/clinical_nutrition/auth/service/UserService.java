@@ -54,12 +54,20 @@ public class UserService implements UserDetailsService {
         userRepository.deleteById(id);
     }
 
+    public User findByUsername(String username) {
+        User user = userRepository.findByUsername(username);
+        if (user == null) {
+            throw new UsernameNotFoundException("Nie znaleziono użytkownika o nazwie: " + username);
+        }
+        return user;
+    }
+
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username);
         if (user == null) {
-            throw new UsernameNotFoundException("User not found with username: " + username);
+            throw new UsernameNotFoundException("Nie znaleziono użytkownika o nazwie: " + username);
         }
         return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),
                 new ArrayList<>());
