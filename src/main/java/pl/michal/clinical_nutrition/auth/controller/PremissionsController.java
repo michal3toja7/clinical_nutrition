@@ -25,9 +25,9 @@ public class PremissionsController {
     private final PremissionsService premissionsService;
     private final PremissionsMapper premissionsMapper;
 
-    @GetMapping
-    public ResponseEntity<List<PremissionsDTO>> findAll() {
-        return ResponseEntity.ok(premissionsMapper.toPremissionsDTOs(premissionsService.findAll()));
+    @GetMapping("/{uzytkownikID}")
+    public ResponseEntity<List<PremissionsDTO>> findByUzytkownikID(@PathVariable Long uzytkownikID){
+        return ResponseEntity.ok(premissionsMapper.toPremissionsDTOs(premissionsService.findByUzytkownikID(uzytkownikID)));
     }
 
     @PostMapping
@@ -36,14 +36,14 @@ public class PremissionsController {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(premissionsDTO);
     }
-
+/*
     @GetMapping("/{id}")
     public ResponseEntity<PremissionsDTO> findById(@PathVariable Long id) {
         Optional<Premissions> premissions = premissionsService.findById(id);
 
         return ResponseEntity.ok(premissionsMapper.toPremissionsDTO((premissions.get())));
     }
-/*
+
     @PutMapping("/{id}")
     public ResponseEntity<PremissionsDTO> update(@PathVariable Long id, @RequestBody PremissionsDTO premissionsDTO) {
         Premissions premissions = premissionsMapper.toPremissions(premissionsDTO);

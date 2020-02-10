@@ -12,6 +12,6 @@ public class Adres {
     private String miasto;
     private String kodPocztowy;
     private String ulica;
-    private String nrDumu;
+    private String nrDomu;
     private String nrMieszkania;
 }

@@ -21,6 +21,10 @@ public class PremissionsService {
         return premissionsRepository.findAll();
     }
 
+    public List<Premissions> findByUzytkownikID(Long uzytkownikID) {
+        return premissionsRepository.findByPremissionsPKUzytkownikID(uzytkownikID);
+    }
+
     public Optional<Premissions> findById(Long id) {
         return premissionsRepository.findById(id);
     }

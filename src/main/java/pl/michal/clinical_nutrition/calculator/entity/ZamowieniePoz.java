@@ -3,7 +3,6 @@ package pl.michal.clinical_nutrition.calculator.entity;
 
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.Type;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
@@ -12,27 +11,26 @@ import java.util.Date;
 @Data
 
 @Entity
-@Table(name = "pacjent", schema = "app")
-public class Pacjent {
+@Table(name = "zamowienie_poz", schema = "app")
+public class ZamowieniePoz {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    @ManyToOne
+    private Zamowienie zamowienie;
+    @OneToOne
+    private Preparat preparat;
     @Column(nullable = false)
-    private String nazwisko;
+    private double objetosc;
     @Column(nullable = false)
-    private String imiona;
-    @Column(nullable = false)
-    private long pesel;
-    @Column(nullable = false)
+    private double coIleH;
+    @Column
+    private double czasWlewu;
+    @Column
     @Enumerated(EnumType.STRING)
-    private Plec plec;
-    @Column (name = "data_urodzenia")
-    private Date dataUrodzenia;
-    @Embedded
-    private Adres adresZamieszkania;
-    @Column (name = "czy_zyje", nullable = false)
-    @Type(type = "yes_no")
-    private boolean czyZyje;
+    private SposobPodania sposobPodania;
+
+
     @Column
     @CreationTimestamp
     private Date created_on;
@@ -40,6 +38,10 @@ public class Pacjent {
     @UpdateTimestamp
     private Date updated_on;
 
-    public enum Plec{K,M}
+    public enum SposobPodania{WLC, BOL, WLK}
+
+
+
+
 
 }

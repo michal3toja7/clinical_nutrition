@@ -12,8 +12,12 @@ public class PacjentDTO {
     private String nazwisko;
     private String imiona;
     private long pesel;
-    private String plec;
+    private Plec plec;
     private Date dataUrodzenia;
     private Adres adresZamieszkania;
     private boolean czyZyje;
+
+
+
+    public enum Plec{K,M}
 }

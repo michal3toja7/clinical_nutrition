@@ -7,7 +7,7 @@ public class JosDTO {
     private long id;
     private String kod;
     private String nazwa;
-    private String rodzaj;
+    private Rodzaj rodzaj;
     private boolean czyAktywny;
     private String nazwaPieczatka;
     private String adresMiasto;
@@ -16,4 +16,7 @@ public class JosDTO {
     private String adresKodPocztowy;
     private String email;
     private String telefon;
+
+
+    public enum Rodzaj{APT,ODD,POR,PRA,IZB,INN};
 }

@@ -4,6 +4,7 @@ import lombok.Data;
 import pl.michal.clinical_nutrition.calculator.entity.Preparat;
 @Data
 public class PreparatDTO {
+    private long id;
     private String nazwa;
     private Typ typ; //Typy: DOJELITOWY 'DOJ', DOUSTNIE 'DOU'
     private String opis;

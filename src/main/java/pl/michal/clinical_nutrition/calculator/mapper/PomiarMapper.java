@@ -2,6 +2,7 @@ package pl.michal.clinical_nutrition.calculator.mapper;
 
 
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.ValueMapping;
 import pl.michal.clinical_nutrition.calculator.dto.PomiarDTO;
@@ -17,6 +18,7 @@ public interface PomiarMapper {
     @ValueMapping(source = "PomiarDTO.StanChorego.NORMA", target = "Pomiar.StanChorego.NORMA")
     @ValueMapping(source = "PomiarDTO.StanChorego.SREDNIO_CIEZKI", target = "Pomiar.StanChorego.SREDNIO_CIEZKI")
     @ValueMapping(source = "PomiarDTO.StanChorego.CIEZKI", target = "Pomiar.StanChorego.CIEZKI")
+    @Mapping(source = "pacjent.id", target = "idPacjenta")
     PomiarDTO toPomiarDTO(Pomiar pomiar);
     List<PomiarDTO> toPomiarDTOs(List<Pomiar> pomiars);
     @ValueMapping(source = "Pomiar.Aktywnosc.LEZY", target = "PomiarDTO.Aktywnosc.LEZY")
@@ -25,5 +27,6 @@ public interface PomiarMapper {
     @ValueMapping(source = "Pomiar.StanChorego.NORMA", target = "PomiarDTO.StanChorego.NORMA")
     @ValueMapping(source = "Pomiar.StanChorego.SREDNIO_CIEZKI", target = "PomiarDTO.StanChorego.SREDNIO_CIEZKI")
     @ValueMapping(source = "Pomiar.StanChorego.CIEZKI", target = "PomiarDTO.StanChorego.CIEZKI")
+    @Mapping(source = "idPacjenta", target = "pacjent.id")
     Pomiar toPomiar(PomiarDTO pomiarDTO);
 }

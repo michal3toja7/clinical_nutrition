@@ -7,7 +7,7 @@ import java.util.Date;
 
 @Data
 public class PomiarDTO {
-
+    private long id;
     private long idPacjenta;
     private double waga;
     private double wzrost;

@@ -16,8 +16,8 @@ public class Pomiar {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @Column(nullable = false)
-    private long idPacjenta;
+    @ManyToOne
+    private Pacjent pacjent;
     @Column(nullable = false)
     private double waga;
     @Column(nullable = false)

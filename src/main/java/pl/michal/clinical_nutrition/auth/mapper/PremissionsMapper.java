@@ -14,13 +14,13 @@ public interface PremissionsMapper {
 
     @Mapping(source = "premissionsPK.josID",target = "josID")
     @Mapping(source = "premissionsPK.uprawnienieID",target = "uprawnienieID")
-    @Mapping(source = "premissionsPK.urzytkownikID",target = "urzytkownikID")
+    @Mapping(source = "premissionsPK.uzytkownikID",target = "uzytkownikID")
     PremissionsDTO toPremissionsDTO(Premissions premissions);
 
     List<PremissionsDTO> toPremissionsDTOs(List<Premissions> premissions);
 
     @Mapping(source = "josID",target = "premissionsPK.josID")
     @Mapping(source = "uprawnienieID",target = "premissionsPK.uprawnienieID")
-    @Mapping(source = "urzytkownikID",target = "premissionsPK.urzytkownikID")
+    @Mapping(source = "uzytkownikID",target = "premissionsPK.uzytkownikID")
     Premissions toPremissions(PremissionsDTO premissionsDTO);
 }

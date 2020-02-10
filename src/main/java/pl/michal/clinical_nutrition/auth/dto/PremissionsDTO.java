@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 
 public class PremissionsDTO {
-    private long urzytkownikID;
+    private long uzytkownikID;
     private long josID;
     private long uprawnienieID;
     private boolean czyAktywny;

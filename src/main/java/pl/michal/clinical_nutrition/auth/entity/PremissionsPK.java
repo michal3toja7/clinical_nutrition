@@ -13,7 +13,7 @@ import java.io.Serializable;
 public class PremissionsPK implements Serializable {
     @Id
     @Column(name = "uzytkownik_id", nullable=false)
-    private long urzytkownikID;
+    private long uzytkownikID;
     @Id
     @Column  (name = "jos_id", nullable=false)
     private long josID;

@@ -15,12 +15,12 @@ public class Jos {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @Column
+    @Column(nullable = false)
     private String kod;
-    @Column
+    @Column(nullable = false)
     private String nazwa;
-    @Column
-    private String rodzaj;
+    @Column(nullable = false)
+    private Rodzaj rodzaj;
     @Column (name = "czy_aktywny", nullable = false)
     @Type(type = "yes_no")
     private boolean czyAktywny;
@@ -38,4 +38,7 @@ public class Jos {
     private String email;
     @Column
     private String telefon;
+
+
+    public enum Rodzaj{APT,ODD,POR,PRA,IZB,INN}
 }
