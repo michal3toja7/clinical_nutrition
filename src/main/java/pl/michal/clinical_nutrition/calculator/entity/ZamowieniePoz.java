@@ -29,6 +29,8 @@ public class ZamowieniePoz {
     @Column
     @Enumerated(EnumType.STRING)
     private SposobPodania sposobPodania;
+    @Column
+    private String uwagi;
 
 
     @Column

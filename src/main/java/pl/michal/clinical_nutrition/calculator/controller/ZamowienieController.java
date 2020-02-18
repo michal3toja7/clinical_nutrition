@@ -30,10 +30,10 @@ public class ZamowienieController {
 
     @PostMapping
     public ResponseEntity<ZamowienieDTO> create(@RequestBody ZamowienieDTO zamowienieDTO) {
-        zamowienieService.save(zamowienieMapper.toZamowienie(zamowienieDTO));
+        Zamowienie zamowienie = zamowienieMapper.toZamowienie(zamowienieDTO);
+        zamowienieService.save(zamowienie);
 
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(zamowienieDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(zamowienieMapper.toZamowienieDTO(zamowienie));
     }
 
     @GetMapping("/{id}")
