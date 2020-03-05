@@ -9,7 +9,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "uprawnienia_definicja", schema = "app")
-public class PremissionsDefinition {
+public class PremissionsDefinition{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;

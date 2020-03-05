@@ -19,7 +19,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 
 @RestController
-@RequestMapping("/api/dodatek")
+@RequestMapping("/api/user/dodatek")
 public class DodatekController {
     private final DodatekService dodatekService;
     private final DodatekMapper dodatekMapper;

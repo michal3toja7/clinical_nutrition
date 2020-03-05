@@ -25,7 +25,12 @@ public class UserController {
 
     @GetMapping
     public ResponseEntity<List<UserDTO>> findAll() {
-        return ResponseEntity.ok(userMapper.toUsersDTOs(userService.findAll()));
+        List<UserDTO> userDTOs =userMapper.toUsersDTOs(userService.findAll());
+        for (UserDTO userDTO : userDTOs){
+            userDTO.setPassword("");
+        }
+
+        return ResponseEntity.ok(userDTOs);
     }
 
     @PostMapping
@@ -38,13 +43,15 @@ public class UserController {
     @GetMapping("/{id}")
     public ResponseEntity<UserDTO> findById(@PathVariable Long id) {
         Optional<User> user = userService.findById(id);
-
-        return ResponseEntity.ok(userMapper.toUserDTO((user.get())));
+        UserDTO userDTO= userMapper.toUserDTO(user.get());
+        userDTO.setPassword("");
+        return ResponseEntity.ok(userDTO);
     }
     @RequestMapping(value = "/current", method = RequestMethod.GET)
     public ResponseEntity<UserDTO> findByToken(@RequestHeader("Authorization") String token) {
         token=token.substring(7); //ucinam Bearer
         UserDTO userDTO = userMapper.toUserDTO(userService.findByToken(token));
+        userDTO.setPassword("");
 
         return ResponseEntity.status(HttpStatus.CREATED).body(userDTO);
     }

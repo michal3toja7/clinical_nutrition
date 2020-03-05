@@ -2,6 +2,8 @@ package pl.michal.clinical_nutrition.auth.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -11,9 +13,7 @@ import pl.michal.clinical_nutrition.auth.config.JwtTokenUtil;
 import pl.michal.clinical_nutrition.auth.entity.User;
 import pl.michal.clinical_nutrition.auth.repository.UserRepository;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @RequiredArgsConstructor
 
@@ -70,7 +70,21 @@ public class UserService implements UserDetailsService {
             throw new UsernameNotFoundException("Nie znaleziono użytkownika o nazwie: " + username);
         }
         return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),
-                new ArrayList<>());
+                getAuthority(user));
+    }
+
+
+
+    private Set<SimpleGrantedAuthority> getAuthority(User user) {
+        Set<SimpleGrantedAuthority> authorities = new HashSet<>();
+        if(user.isAdministrator()) {
+            authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+        }
+        else{
+            authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+        }
+        return authorities;
+        //return Arrays.asList(new SimpleGrantedAuthority("ROLE_ADMIN"));
     }
 
 }

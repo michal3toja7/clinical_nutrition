@@ -18,7 +18,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 
 @RestController
-@RequestMapping("/api/pacjent")
+@RequestMapping("/api/user/pacjent")
 public class PacjentController {
     private final PacjentService pacjentService;
     private final PacjentMapper pacjentMapper;

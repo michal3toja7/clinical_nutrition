@@ -22,7 +22,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 
 @RestController
-@RequestMapping("/api/zamowienie/pozycje")
+@RequestMapping("/api/user/zamowienie/pozycje")
 public class ZamowieniePozController {
     private final ZamowieniePozService zamowieniePozService;
     private final ZamowieniePozMapper zamowieniePozMapper;

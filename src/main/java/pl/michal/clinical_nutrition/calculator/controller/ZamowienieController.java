@@ -18,7 +18,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 
 @RestController
-@RequestMapping("/api/zamowienie")
+@RequestMapping("/api/user/zamowienie")
 public class ZamowienieController {
     private final ZamowienieService zamowienieService;
     private final ZamowienieMapper zamowienieMapper;

@@ -20,7 +20,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 
 @RestController
-@RequestMapping("/api/pomiar")
+@RequestMapping("/api/user/pomiar")
 public class PomiarController {
     private final PomiarService pomiarService;
     private final PomiarMapper pomiarMapper;

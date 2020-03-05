@@ -54,8 +54,10 @@ public class JwtAuthenticationController {
         final UserDetails userDetails = userService
                 .loadUserByUsername(authenticationRequest.getUsername());
 
+
         final String token = jwtTokenUtil.generateToken(userDetails);
         userDTO.setToken(token);
+        userDTO.setPassword("");
         System.out.println(jwtTokenUtil.getExpirationDateFromToken(token));
         return ResponseEntity.status(HttpStatus.OK).body(userDTO);
                 //status(HttpStatus.OK).body(token+userMapper.toUserDTO((user)));

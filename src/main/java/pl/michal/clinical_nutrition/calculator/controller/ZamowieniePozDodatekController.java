@@ -19,7 +19,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 
 @RestController
-@RequestMapping("/api/zamowienie/pozycje/dodatek")
+@RequestMapping("/api/user/zamowienie/pozycje/dodatek")
 public class ZamowieniePozDodatekController {
     private final ZamowieniePozDodatekService zamowieniePozDodatekService;
     private final ZamowieniePozDodatekMapper zamowieniePozDodatekMapper;

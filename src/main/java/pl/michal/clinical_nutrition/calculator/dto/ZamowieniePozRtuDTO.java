@@ -17,7 +17,7 @@ public class ZamowieniePozRtuDTO {
     private long zamowienieId;
     private TypZywienia typZywienia;
     private WorekPreparat worekPreparat;
-    private double casWlewu;
+    private double czasWlewu;
     private String uwagi;
 
     public enum TypZywienia{CAL, CZE, IMM}

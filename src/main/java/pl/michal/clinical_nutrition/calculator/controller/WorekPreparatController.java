@@ -18,7 +18,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 
 @RestController
-@RequestMapping("/api/worekPreparat")
+@RequestMapping("/api/user/worekPreparat")
 public class WorekPreparatController {
     private final WorekPreparatService worekPreparatService;
     private final WorekPreparatMapper worekPreparatMapper;

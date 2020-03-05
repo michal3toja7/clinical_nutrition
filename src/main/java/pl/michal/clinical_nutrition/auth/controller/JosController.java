@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pl.michal.clinical_nutrition.auth.dto.JosDTO;
 import pl.michal.clinical_nutrition.auth.entity.Jos;
@@ -18,7 +19,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 
 @RestController
-@RequestMapping("/api/admin/jos")
+@RequestMapping("/api/user/jos")
 public class JosController {
     private final JosService josService;
     private final JosMapper josMapper;
@@ -29,6 +30,7 @@ public class JosController {
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<JosDTO> create(@RequestBody JosDTO josDTO) {
         josService.save(josMapper.toJos(josDTO));
 
@@ -43,6 +45,7 @@ public class JosController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<JosDTO> update(@PathVariable Long id, @RequestBody JosDTO josDTO) {
         Jos jos = josMapper.toJos(josDTO);
         jos.setId(id);
@@ -53,6 +56,7 @@ public class JosController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity delete(@PathVariable Long id) {
         josService.deleteById(id);
 

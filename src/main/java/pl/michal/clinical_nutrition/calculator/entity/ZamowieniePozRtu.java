@@ -24,7 +24,7 @@ public class ZamowieniePozRtu {
     @OneToOne
     private WorekPreparat worekPreparat;
     @Column(nullable = false)
-    private double casWlewu;
+    private double czasWlewu;
     @Column
     private String uwagi;
 
