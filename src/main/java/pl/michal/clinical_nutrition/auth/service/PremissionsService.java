@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.michal.clinical_nutrition.auth.entity.Premissions;
+import pl.michal.clinical_nutrition.auth.entity.User;
 import pl.michal.clinical_nutrition.auth.repository.PremissionsRepository;
 
 import java.util.List;
@@ -16,13 +17,20 @@ public class PremissionsService {
 
     @Autowired
     private final PremissionsRepository premissionsRepository;
+    @Autowired
+    private final UserService userService;
 
     public List<Premissions> findAll() {
         return premissionsRepository.findAll();
     }
 
     public List<Premissions> findByUzytkownikID(Long uzytkownikID) {
-        return premissionsRepository.findByPremissionsPKUzytkownikID(uzytkownikID);
+        Optional <User> user = userService.findById(uzytkownikID);
+        return premissionsRepository.findByPremissionsPKUser(user.get());
+    }
+
+    public List<Premissions> findByUser(User user) {
+        return premissionsRepository.findByPremissionsPKUser(user);
     }
 
     public Optional<Premissions> findById(Long id) {

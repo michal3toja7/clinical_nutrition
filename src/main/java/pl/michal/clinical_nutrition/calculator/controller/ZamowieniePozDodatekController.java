@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pl.michal.clinical_nutrition.calculator.dto.ZamowieniePozDodatekDTO;
 import pl.michal.clinical_nutrition.calculator.entity.ZamowieniePozDodatek;
@@ -26,11 +27,13 @@ public class ZamowieniePozDodatekController {
 
 
     @GetMapping("/pozycja/{idZamowieniePozRtu}")
+    @PreAuthorize("hasAuthority('Premission1020') or hasRole('ADMIN')")
     public ResponseEntity<List<ZamowieniePozDodatekDTO>> findByIdZamowieniaPozRtu(@PathVariable Long idZamowieniePozRtu) {
         return ResponseEntity.ok(zamowieniePozDodatekMapper.toZamowieniePozDodatekDTOs(zamowieniePozDodatekService.findByIdZamowieniaPozRtu(idZamowieniePozRtu)));
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('Premission1021') or hasRole('ADMIN')")
     public ResponseEntity<ZamowieniePozDodatekDTO> create(@RequestBody ZamowieniePozDodatekDTO zamowieniePozDodatekDTO) {
         ZamowieniePozDodatek zamowieniePozDodatek = zamowieniePozDodatekMapper.toZamowieniePozDodatek(zamowieniePozDodatekDTO);
         zamowieniePozDodatekService.save(zamowieniePozDodatek);
@@ -39,6 +42,7 @@ public class ZamowieniePozDodatekController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('Premission1020') or hasRole('ADMIN')")
     public ResponseEntity<ZamowieniePozDodatekDTO> findById(@PathVariable Long id) {
         Optional<ZamowieniePozDodatek> zamowieniePozDodatek = zamowieniePozDodatekService.findById(id);
 
@@ -46,6 +50,7 @@ public class ZamowieniePozDodatekController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('Premission1022') or hasRole('ADMIN')")
     public ResponseEntity<ZamowieniePozDodatekDTO> update(@PathVariable Long id, @RequestBody ZamowieniePozDodatekDTO zamowieniePozDodatekDTO) {
         ZamowieniePozDodatek zamowieniePozDodatek = zamowieniePozDodatekMapper.toZamowieniePozDodatek(zamowieniePozDodatekDTO);
         zamowieniePozDodatek.setId(id);
@@ -56,6 +61,7 @@ public class ZamowieniePozDodatekController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('Premission1022') or hasRole('ADMIN')")
     public ResponseEntity delete(@PathVariable Long id) {
         zamowieniePozDodatekService.deleteById(id);
 

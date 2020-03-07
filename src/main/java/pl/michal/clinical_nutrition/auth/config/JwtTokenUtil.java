@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import pl.michal.clinical_nutrition.auth.entity.Jos;
 
 @Component
 public class JwtTokenUtil implements Serializable {
@@ -21,6 +22,8 @@ public class JwtTokenUtil implements Serializable {
 
     //60 sekund * 60 minut * 1 godzina
     public static final long JWT_TOKEN_VALIDITY = 30 * 60;
+
+    private static Map<String,Date> blackList = new HashMap<>();
 
     @Value("${jwt.secret}")
     private String secret;
@@ -35,8 +38,11 @@ public class JwtTokenUtil implements Serializable {
         return getClaimFromToken(token, Claims::getExpiration);
     }
 
-    public void setExpirationDateFromToken(String token) {
-        getAllClaimsFromToken(token).setExpiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY * 1000));
+    public long getIdCurrentJos(String token){
+        Claims claims=getAllClaimsFromToken(token);
+        if(!(claims.get("currentJos")==null))
+            return claims.get("currentJos",Long.class);
+        return -1;
     }
 
     public <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {
@@ -48,16 +54,25 @@ public class JwtTokenUtil implements Serializable {
         return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
     }
 
-    //check if the token has expired
     private Boolean isTokenExpired(String token) {
         final Date expiration = getExpirationDateFromToken(token);
         return expiration.before(new Date());
     }
 
-    //generate token for user
     public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
         return doGenerateToken(claims, userDetails.getUsername());
+    }
+
+    public String generateToken(UserDetails userDetails, long josId, String oldToken) {
+        addTokenToBlackList(oldToken);
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("currentJos", josId);
+        return doGenerateToken(claims, userDetails.getUsername());
+    }
+
+    public void addTokenToBlackList(String token){
+        blackList.put(token,getExpirationDateFromToken(token));
     }
 
     //while creating the token -
@@ -72,9 +87,20 @@ public class JwtTokenUtil implements Serializable {
                 .signWith(SignatureAlgorithm.HS512, secret).compact();
     }
 
+    private Boolean controlBlacklist(String token){
+           for (String tok: blackList.keySet()){
+               if(isTokenExpired(tok))
+                   blackList.remove(tok);
+           }
+         if(blackList.get(token)!=null)
+             return false;
+         return true;
+    }
+
     //validate token
     public Boolean validateToken(String token, UserDetails userDetails) {
+        System.out.println("Currrent Jos: "+getIdCurrentJos(token));
         final String username = getUsernameFromToken(token);
-        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token) && controlBlacklist(token));
     }
 }

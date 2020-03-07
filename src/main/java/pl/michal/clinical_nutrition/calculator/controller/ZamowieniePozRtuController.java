@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pl.michal.clinical_nutrition.calculator.dto.ZamowieniePozRtuDTO;
 import pl.michal.clinical_nutrition.calculator.entity.ZamowieniePozRtu;
@@ -26,11 +27,13 @@ public class ZamowieniePozRtuController {
 
 
     @GetMapping("/zamowienie/{idZamowienia}")
+    @PreAuthorize("hasAuthority('Premission1020') or hasRole('ADMIN')")
     public ResponseEntity<List<ZamowieniePozRtuDTO>> findByIdZamowienia(@PathVariable Long idZamowienia) {
         return ResponseEntity.ok(zamowieniePozRtuMapper.toZamowieniePozRtuDTOs(zamowieniePozRtuService.findByIdZamowienia(idZamowienia)));
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('Premission1021') or hasRole('ADMIN')")
     public ResponseEntity<ZamowieniePozRtuDTO> create(@RequestBody ZamowieniePozRtuDTO zamowieniePozRtuDTO) {
         ZamowieniePozRtu zamowieniePozRtu = zamowieniePozRtuMapper.toZamowieniePozRtu(zamowieniePozRtuDTO);
         zamowieniePozRtuService.save(zamowieniePozRtu);
@@ -39,6 +42,7 @@ public class ZamowieniePozRtuController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('Premission1020') or hasRole('ADMIN')")
     public ResponseEntity<ZamowieniePozRtuDTO> findById(@PathVariable Long id) {
         Optional<ZamowieniePozRtu> zamowieniePozRtu = zamowieniePozRtuService.findById(id);
 
@@ -46,6 +50,7 @@ public class ZamowieniePozRtuController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('Premission1022') or hasRole('ADMIN')")
     public ResponseEntity<ZamowieniePozRtuDTO> update(@PathVariable Long id, @RequestBody ZamowieniePozRtuDTO zamowieniePozRtuDTO) {
         ZamowieniePozRtu zamowieniePozRtu = zamowieniePozRtuMapper.toZamowieniePozRtu(zamowieniePozRtuDTO);
         zamowieniePozRtu.setId(id);
@@ -56,6 +61,7 @@ public class ZamowieniePozRtuController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('Premission1022') or hasRole('ADMIN')")
     public ResponseEntity delete(@PathVariable Long id) {
         zamowieniePozRtuService.deleteById(id);
 

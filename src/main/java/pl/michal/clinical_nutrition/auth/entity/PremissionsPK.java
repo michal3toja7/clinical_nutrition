@@ -5,6 +5,7 @@ import org.springframework.data.annotation.Id;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.persistence.ManyToOne;
 import java.io.Serializable;
 
 @Data
@@ -12,13 +13,13 @@ import java.io.Serializable;
 @Embeddable
 public class PremissionsPK implements Serializable {
     @Id
-    @Column(name = "uzytkownik_id", nullable=false)
-    private long uzytkownikID;
+    @ManyToOne
+    private User user;
     @Id
-    @Column  (name = "jos_id", nullable=false)
-    private long josID;
+    @ManyToOne
+    private Jos jos;
     @Id
-    @Column  (name = "uprawnienie_id", nullable=false)
-    private long uprawnienieID;
+    @ManyToOne
+    private PremissionsDefinition premissionsDefinition;
 
 }

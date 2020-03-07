@@ -9,11 +9,8 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import pl.michal.clinical_nutrition.auth.dto.JosDTO;
 import pl.michal.clinical_nutrition.auth.entity.User;
 import pl.michal.clinical_nutrition.auth.mapper.UserMapper;
 
@@ -44,7 +41,18 @@ public class JwtAuthenticationController {
     @Autowired
     private final UserMapper userMapper;
 
-
+    @RequestMapping(value = "/api/user/refreshToken", method = RequestMethod.POST)
+    public ResponseEntity<?> refreshAuthenticationToken(@RequestBody JosDTO josDTO, @RequestHeader("Authorization") String token) throws Exception {
+        token=token.substring(7); //ucinam Bearer
+        final UserDetails userDetails = userService
+                .loadUserByUsername(jwtTokenUtil.getUsernameFromToken(token));
+        UserDTO userDTO = userMapper.toUserDTO(userService.findByUsername(jwtTokenUtil.getUsernameFromToken(token)));
+        final String newToken = jwtTokenUtil.generateToken(userDetails,josDTO.getId(), token);
+        userDTO.setToken(newToken);
+        
+        return ResponseEntity.status(HttpStatus.OK).body(userDTO);
+        //status(HttpStatus.OK).body(token+userMapper.toUserDTO((user)));
+    }
 
     @RequestMapping(value = "/api/authenticate", method = RequestMethod.POST)
     public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws Exception {

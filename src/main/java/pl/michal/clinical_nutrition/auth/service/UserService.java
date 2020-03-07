@@ -10,7 +10,11 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import pl.michal.clinical_nutrition.auth.config.JwtTokenUtil;
+import pl.michal.clinical_nutrition.auth.entity.Jos;
+import pl.michal.clinical_nutrition.auth.entity.Premissions;
 import pl.michal.clinical_nutrition.auth.entity.User;
+import pl.michal.clinical_nutrition.auth.repository.JosRepository;
+import pl.michal.clinical_nutrition.auth.repository.PremissionsRepository;
 import pl.michal.clinical_nutrition.auth.repository.UserRepository;
 
 import java.util.*;
@@ -22,9 +26,12 @@ public class UserService implements UserDetailsService {
     @Autowired
     private final UserRepository userRepository;
     @Autowired
-    private PasswordEncoder bcryptEncoder;
+    private final JosRepository josRepository;
     @Autowired
-    private JwtTokenUtil jwtTokenUtil;
+    private final PremissionsRepository premissionsRepository;
+    @Autowired
+    private PasswordEncoder bcryptEncoder;
+
 
 
 
@@ -35,15 +42,6 @@ public class UserService implements UserDetailsService {
     public Optional<User> findById(Long id) {
         return userRepository.findById(id);
     }
-
-
-    public User findByToken(String token) {
-
-        System.out.println(jwtTokenUtil.getExpirationDateFromToken(token));
-        return userRepository.findByUsername(jwtTokenUtil.getUsernameFromToken(token));
-
-    }
-
 
     public User save(User user) {
         user.setPassword(bcryptEncoder.encode(user.getPassword()));
@@ -73,8 +71,6 @@ public class UserService implements UserDetailsService {
                 getAuthority(user));
     }
 
-
-
     private Set<SimpleGrantedAuthority> getAuthority(User user) {
         Set<SimpleGrantedAuthority> authorities = new HashSet<>();
         if(user.isAdministrator()) {
@@ -84,7 +80,43 @@ public class UserService implements UserDetailsService {
             authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
         }
         return authorities;
-        //return Arrays.asList(new SimpleGrantedAuthority("ROLE_ADMIN"));
     }
+
+
+    public UserDetails loadUserByUsername(String username,long josId) throws UsernameNotFoundException {
+        User user = userRepository.findByUsername(username);
+        Optional<Jos> jos = josRepository.findById(josId);
+        if (user == null) {
+            throw new UsernameNotFoundException("Nie znaleziono użytkownika o nazwie: " + username);
+        }
+        if (jos == null) {
+            return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),
+                    getAuthority(user));
+        }
+        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),
+                getAuthority(user, jos.get()));
+    }
+
+    private Set<SimpleGrantedAuthority> getAuthority(User user, Jos jos) {
+
+        List<Premissions> premissions = premissionsRepository.findByPremissionsPKUserAndPremissionsPKJosAndCzyAktywny(user, jos,true);
+        Set<SimpleGrantedAuthority> authorities = new HashSet<>();
+
+        if(user.isAdministrator()) {
+            authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+        }
+        else{
+            authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+        }
+
+        for (Premissions premission : premissions) {
+            authorities.add(new SimpleGrantedAuthority( "Premission"+premission.getPremissionsPK().getPremissionsDefinition().getId()));
+        }
+
+
+        return authorities;
+    }
+
+
 
 }

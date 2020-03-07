@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pl.michal.clinical_nutrition.calculator.dto.ZamowienieDTO;
 import pl.michal.clinical_nutrition.calculator.entity.Zamowienie;
@@ -24,11 +25,13 @@ public class ZamowienieController {
     private final ZamowienieMapper zamowienieMapper;
 
     @GetMapping
+    @PreAuthorize("hasAuthority('Premission1017') or hasRole('ADMIN')")
     public ResponseEntity<List<ZamowienieDTO>> findAll() {
         return ResponseEntity.ok(zamowienieMapper.toZamowienieDTOs(zamowienieService.findAll()));
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('Premission1018') or hasRole('ADMIN')")
     public ResponseEntity<ZamowienieDTO> create(@RequestBody ZamowienieDTO zamowienieDTO) {
         Zamowienie zamowienie = zamowienieMapper.toZamowienie(zamowienieDTO);
         zamowienieService.save(zamowienie);
@@ -37,6 +40,7 @@ public class ZamowienieController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('Premission1017') or hasRole('ADMIN')")
     public ResponseEntity<ZamowienieDTO> findById(@PathVariable Long id) {
         Optional<Zamowienie> zamowienie = zamowienieService.findById(id);
 
@@ -44,6 +48,7 @@ public class ZamowienieController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('Premission1019') or hasRole('ADMIN')")
     public ResponseEntity<ZamowienieDTO> update(@PathVariable Long id, @RequestBody ZamowienieDTO zamowienieDTO) {
         Zamowienie zamowienie = zamowienieMapper.toZamowienie(zamowienieDTO);
         zamowienie.setId(id);
@@ -54,6 +59,7 @@ public class ZamowienieController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('Premission1019') or hasRole('ADMIN')")
     public ResponseEntity delete(@PathVariable Long id) {
         zamowienieService.deleteById(id);
 

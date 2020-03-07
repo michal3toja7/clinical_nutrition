@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pl.michal.clinical_nutrition.calculator.dto.DodatekDTO;
 import pl.michal.clinical_nutrition.calculator.entity.Dodatek;
@@ -25,11 +26,13 @@ public class DodatekController {
     private final DodatekMapper dodatekMapper;
 
     @GetMapping
+    @PreAuthorize("hasAuthority('Premission1002') or hasRole('ADMIN')")
     public ResponseEntity<List<DodatekDTO>> findAll() {
         return ResponseEntity.ok(dodatekMapper.toDodatekDTOs(dodatekService.findAll()));
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('Premission1003') or hasRole('ADMIN')")
     public ResponseEntity<List<DodatekDTO>> create(@RequestBody List<DodatekDTO> dodatekDTOS) {
         for(DodatekDTO dodatekDTO : dodatekDTOS) {
             dodatekService.save(dodatekMapper.toDodatek(dodatekDTO));
@@ -40,6 +43,7 @@ public class DodatekController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('Premission100') or hasRole('ADMIN')")
     public ResponseEntity<DodatekDTO> findById(@PathVariable Long id) {
         Optional<Dodatek> dodatek = dodatekService.findById(id);
 
@@ -47,6 +51,7 @@ public class DodatekController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('Premission1004') or hasRole('ADMIN')")
     public ResponseEntity<DodatekDTO> update(@PathVariable Long id, @RequestBody DodatekDTO dodatekDTO) {
         Dodatek dodatek = dodatekMapper.toDodatek(dodatekDTO);
         dodatek.setId(id);
@@ -57,6 +62,7 @@ public class DodatekController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('Premission1004') or hasRole('ADMIN')")
     public ResponseEntity delete(@PathVariable Long id) {
         dodatekService.deleteById(id);
 

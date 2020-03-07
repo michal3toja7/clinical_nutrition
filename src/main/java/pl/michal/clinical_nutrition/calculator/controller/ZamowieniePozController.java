@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pl.michal.clinical_nutrition.calculator.dto.ZamowienieDTO;
 import pl.michal.clinical_nutrition.calculator.dto.ZamowieniePozDTO;
@@ -30,11 +31,13 @@ public class ZamowieniePozController {
 
 
     @GetMapping("/zamowienie/{idZamowienia}")
+    @PreAuthorize("hasAuthority('Premission1020') or hasRole('ADMIN')")
     public ResponseEntity<List<ZamowieniePozDTO>> findByIdZamowienia(@PathVariable Long idZamowienia) {
         return ResponseEntity.ok(zamowieniePozMapper.toZamowieniePozDTOs(zamowieniePozService.findByIdZamowienia(idZamowienia)));
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('Premission1021') or hasRole('ADMIN')")
     public ResponseEntity<ZamowieniePozDTO> create(@RequestBody ZamowieniePozDTO zamowieniePozDTO) {
         ZamowieniePoz zamowieniePoz = zamowieniePozMapper.toZamowieniePoz(zamowieniePozDTO);
         zamowieniePozService.save(zamowieniePoz);
@@ -43,6 +46,7 @@ public class ZamowieniePozController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('Premission1020') or hasRole('ADMIN')")
     public ResponseEntity<ZamowieniePozDTO> findById(@PathVariable Long id) {
         Optional<ZamowieniePoz> zamowieniePoz = zamowieniePozService.findById(id);
 
@@ -50,6 +54,7 @@ public class ZamowieniePozController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('Premission1022') or hasRole('ADMIN')")
     public ResponseEntity<ZamowieniePozDTO> update(@PathVariable Long id, @RequestBody ZamowieniePozDTO zamowieniePozDTO) {
         ZamowieniePoz zamowieniePoz = zamowieniePozMapper.toZamowieniePoz(zamowieniePozDTO);
         zamowieniePoz.setId(id);
@@ -60,6 +65,7 @@ public class ZamowieniePozController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('Premission1022') or hasRole('ADMIN')")
     public ResponseEntity delete(@PathVariable Long id) {
         zamowieniePozService.deleteById(id);
 

@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pl.michal.clinical_nutrition.calculator.dto.WorekPreparatDTO;
 import pl.michal.clinical_nutrition.calculator.entity.WorekPreparat;
@@ -24,17 +25,20 @@ public class WorekPreparatController {
     private final WorekPreparatMapper worekPreparatMapper;
 
     @GetMapping
+    @PreAuthorize("hasAuthority('Premission1014') or hasRole('ADMIN')")
     public ResponseEntity<List<WorekPreparatDTO>> findAll() {
         return ResponseEntity.ok(worekPreparatMapper.toWorekPreparatDTOs(worekPreparatService.findAll()));
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('Premission1015') or hasRole('ADMIN')")
     public ResponseEntity<WorekPreparatDTO> create(@RequestBody WorekPreparatDTO worekPreparatDTO) {
         worekPreparatService.save(worekPreparatMapper.toWorekPreparat(worekPreparatDTO));
         return ResponseEntity.status(HttpStatus.CREATED).body(worekPreparatDTO);
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('Premission1014') or hasRole('ADMIN')")
     public ResponseEntity<WorekPreparatDTO> findById(@PathVariable Long id) {
         Optional<WorekPreparat> worekPreparat = worekPreparatService.findById(id);
 
@@ -42,6 +46,7 @@ public class WorekPreparatController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('Premission1016') or hasRole('ADMIN')")
     public ResponseEntity<WorekPreparatDTO> update(@PathVariable Long id, @RequestBody WorekPreparatDTO worekPreparatDTO) {
         WorekPreparat worekPreparat = worekPreparatMapper.toWorekPreparat(worekPreparatDTO);
         worekPreparat.setId(id);
@@ -52,6 +57,7 @@ public class WorekPreparatController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('Premission1016') or hasRole('ADMIN')")
     public ResponseEntity delete(@PathVariable Long id) {
         worekPreparatService.deleteById(id);
 

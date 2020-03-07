@@ -47,14 +47,6 @@ public class UserController {
         userDTO.setPassword("");
         return ResponseEntity.ok(userDTO);
     }
-    @RequestMapping(value = "/current", method = RequestMethod.GET)
-    public ResponseEntity<UserDTO> findByToken(@RequestHeader("Authorization") String token) {
-        token=token.substring(7); //ucinam Bearer
-        UserDTO userDTO = userMapper.toUserDTO(userService.findByToken(token));
-        userDTO.setPassword("");
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(userDTO);
-    }
 
     @PutMapping("/{id}")
     public ResponseEntity<UserDTO> update(@PathVariable Long id, @RequestBody UserDTO userDTO) {
