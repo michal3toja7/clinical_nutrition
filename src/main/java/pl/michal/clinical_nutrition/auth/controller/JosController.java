@@ -29,6 +29,15 @@ public class JosController {
         return ResponseEntity.ok(josMapper.toJosDTOs(josService.findAll()));
     }
 
+    @GetMapping("/premission")
+    public ResponseEntity<List<JosDTO>> findPremission (@RequestHeader("Authorization") String token) throws Exception {
+        token=token.substring(7); //ucinam Bearer
+        //josService.test(token);
+
+
+        return ResponseEntity.ok(josMapper.toJosDTOs(josService.findByPremission(token)));
+    }
+
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<JosDTO> create(@RequestBody JosDTO josDTO) {

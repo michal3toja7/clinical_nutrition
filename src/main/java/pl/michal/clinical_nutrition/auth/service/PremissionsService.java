@@ -3,7 +3,9 @@ package pl.michal.clinical_nutrition.auth.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import pl.michal.clinical_nutrition.auth.entity.Jos;
 import pl.michal.clinical_nutrition.auth.entity.Premissions;
+import pl.michal.clinical_nutrition.auth.entity.PremissionsDefinition;
 import pl.michal.clinical_nutrition.auth.entity.User;
 import pl.michal.clinical_nutrition.auth.repository.PremissionsRepository;
 
@@ -31,6 +33,10 @@ public class PremissionsService {
 
     public List<Premissions> findByUser(User user) {
         return premissionsRepository.findByPremissionsPKUser(user);
+    }
+
+    public List<Premissions> findByUserAndPremission(User user, PremissionsDefinition premissionsDefinition) {
+        return premissionsRepository.findByPremissionsPKUserAndPremissionsPKPremissionsDefinitionAndCzyAktywny(user, premissionsDefinition, true);
     }
 
     public Optional<Premissions> findById(Long id) {

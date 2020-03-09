@@ -3,6 +3,7 @@ package pl.michal.clinical_nutrition.auth.config;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -14,13 +15,14 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import pl.michal.clinical_nutrition.auth.entity.Jos;
+import pl.michal.clinical_nutrition.calculator.entity.Zamowienie;
 
 @Component
 public class JwtTokenUtil implements Serializable {
 
     private static final long serialVersionUID = -2550185165626007488L;
 
-    //60 sekund * 60 minut * 1 godzina
+    //60 sekund * 60 minut * 1 godzina 30 * 60;
     public static final long JWT_TOKEN_VALIDITY = 30 * 60;
 
     private static Map<String,Date> blackList = new HashMap<>();
@@ -88,11 +90,9 @@ public class JwtTokenUtil implements Serializable {
     }
 
     private Boolean controlBlacklist(String token){
-           for (String tok: blackList.keySet()){
-               if(isTokenExpired(tok))
-                   blackList.remove(tok);
-           }
-         if(blackList.get(token)!=null)
+        blackList.entrySet().removeIf(tok -> tok.getValue().before(new Date()));
+
+        if(blackList.get(token)!=null)
              return false;
          return true;
     }

@@ -6,6 +6,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import pl.michal.clinical_nutrition.auth.dto.JosDTO;
+import pl.michal.clinical_nutrition.auth.entity.Jos;
+import pl.michal.clinical_nutrition.auth.mapper.JosMapper;
 import pl.michal.clinical_nutrition.calculator.dto.ZamowienieDTO;
 import pl.michal.clinical_nutrition.calculator.entity.Zamowienie;
 import pl.michal.clinical_nutrition.calculator.mapper.ZamowienieMapper;
@@ -23,11 +26,20 @@ import java.util.Optional;
 public class ZamowienieController {
     private final ZamowienieService zamowienieService;
     private final ZamowienieMapper zamowienieMapper;
+    private final JosMapper josMapper;
 
     @GetMapping
     @PreAuthorize("hasAuthority('Premission1017') or hasRole('ADMIN')")
     public ResponseEntity<List<ZamowienieDTO>> findAll() {
         return ResponseEntity.ok(zamowienieMapper.toZamowienieDTOs(zamowienieService.findAll()));
+    }
+
+    @PostMapping("/jos")
+    @PreAuthorize("hasAuthority('Premission1017') or hasRole('ADMIN')")
+    public ResponseEntity<List<ZamowienieDTO>> findByJos(@RequestBody JosDTO josDTO) {
+        Jos jos = josMapper.toJos(josDTO);
+
+        return ResponseEntity.ok(zamowienieMapper.toZamowienieDTOs(zamowienieService.findByJos(jos)));
     }
 
     @PostMapping

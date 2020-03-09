@@ -7,4 +7,5 @@ import pl.michal.clinical_nutrition.auth.entity.Jos;
 
 @Repository
 public interface JosRepository extends JpaRepository<Jos, Long> {
+
 }

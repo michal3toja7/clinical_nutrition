@@ -54,6 +54,13 @@ public class JwtAuthenticationController {
         //status(HttpStatus.OK).body(token+userMapper.toUserDTO((user)));
     }
 
+    @RequestMapping(value = "/api/user/logout", method = RequestMethod.POST)
+    public ResponseEntity<?> logout(@RequestHeader("Authorization") String token) throws Exception {
+        token=token.substring(7); //ucinam Bearer
+        jwtTokenUtil.addTokenToBlackList(token);
+        return ResponseEntity.status(HttpStatus.OK).body("Wylogowano");
+    }
+
     @RequestMapping(value = "/api/authenticate", method = RequestMethod.POST)
     public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws Exception {
         authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
