@@ -12,7 +12,6 @@ import java.util.List;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel="spring")
 public interface ZamowienieMapper {
-
         @Mapping(source = "pacjent", target = "pacjent")
         @Mapping(source = "pomiar", target = "pomiar")
         @Mapping(source = "josZamawiajacy", target = "josZamawiajacy")
@@ -24,5 +23,4 @@ public interface ZamowienieMapper {
         @Mapping(source = "josZamawiajacy", target = "josZamawiajacy")
         @Mapping(source = "josRealizujacy", target = "josRealizujacy")
         Zamowienie toZamowienie(ZamowienieDTO zamowienieDTO);
-
 }

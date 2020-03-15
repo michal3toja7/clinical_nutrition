@@ -2,11 +2,10 @@ package pl.michal.clinical_nutrition.calculator.dto;
 
 
 import lombok.Data;
-import pl.michal.clinical_nutrition.auth.dto.JosDTO;
+import pl.michal.clinical_nutrition.admin.dto.JosDTO;
 
 
 import java.util.Date;
-import java.util.List;
 
 @Data
 public class ZamowienieDTO {

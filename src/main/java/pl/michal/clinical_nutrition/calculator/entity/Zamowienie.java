@@ -4,7 +4,7 @@ package pl.michal.clinical_nutrition.calculator.entity;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import pl.michal.clinical_nutrition.auth.entity.Jos;
+import pl.michal.clinical_nutrition.admin.entity.Jos;
 
 import javax.persistence.*;
 import java.util.Date;

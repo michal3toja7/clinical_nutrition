@@ -25,7 +25,9 @@ public class PacjentController {
     private final PacjentMapper pacjentMapper;
 
     @GetMapping
+
     @PreAuthorize("hasAuthority('Premission1005') or hasRole('ADMIN')")
+
     public ResponseEntity<List<PacjentDTO>> findAll() {
         return ResponseEntity.ok(pacjentMapper.toPacjentDTOs(pacjentService.findAll()));
     }

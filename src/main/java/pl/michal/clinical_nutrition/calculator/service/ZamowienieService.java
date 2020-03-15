@@ -3,7 +3,7 @@ package pl.michal.clinical_nutrition.calculator.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import pl.michal.clinical_nutrition.auth.entity.Jos;
+import pl.michal.clinical_nutrition.admin.entity.Jos;
 import pl.michal.clinical_nutrition.calculator.entity.Zamowienie;
 import pl.michal.clinical_nutrition.calculator.repository.ZamowienieRepository;
 
