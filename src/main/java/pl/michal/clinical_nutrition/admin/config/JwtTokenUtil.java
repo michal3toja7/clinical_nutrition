@@ -1,18 +1,20 @@
 package pl.michal.clinical_nutrition.admin.config;
 
 import java.io.Serializable;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 
+import netscape.javascript.JSObject;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import pl.michal.clinical_nutrition.admin.entity.Premissions;
 
 @Component
 public class JwtTokenUtil implements Serializable {
@@ -35,6 +37,15 @@ public class JwtTokenUtil implements Serializable {
     //retrieve expiration date from jwt token
     public Date getExpirationDateFromToken(String token) {
         return getClaimFromToken(token, Claims::getExpiration);
+    }
+
+    public Set<SimpleGrantedAuthority> getAutoritiesFromToken(String token){
+        Claims claims=getAllClaimsFromToken(token);
+        Set<SimpleGrantedAuthority> authorities =  new HashSet<>();
+        for (Object auth : claims.get("authority",ArrayList.class)) {
+            authorities.add(new SimpleGrantedAuthority(auth.toString()));
+        }
+        return authorities;
     }
 
     public long getIdCurrentJos(String token){
@@ -60,6 +71,12 @@ public class JwtTokenUtil implements Serializable {
 
     public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
+        ArrayList<String> authsList = new ArrayList<>(userDetails.getAuthorities().size());
+
+        for (GrantedAuthority authority : userDetails.getAuthorities()) {
+            authsList.add(authority.getAuthority());
+        }
+        claims.put("authority", authsList);
         return doGenerateToken(claims, userDetails.getUsername());
     }
 
@@ -67,6 +84,12 @@ public class JwtTokenUtil implements Serializable {
         addTokenToBlackList(oldToken);
         Map<String, Object> claims = new HashMap<>();
         claims.put("currentJos", josId);
+        ArrayList<String> authsList = new ArrayList<>(userDetails.getAuthorities().size());
+
+        for (GrantedAuthority authority : userDetails.getAuthorities()) {
+            authsList.add(authority.getAuthority());
+        }
+        claims.put("authority", authsList);
         return doGenerateToken(claims, userDetails.getUsername());
     }
 
@@ -96,7 +119,6 @@ public class JwtTokenUtil implements Serializable {
 
     //validate token
     public Boolean validateToken(String token, UserDetails userDetails) {
-        System.out.println("Currrent Jos: "+getIdCurrentJos(token));
         final String username = getUsernameFromToken(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token) && controlBlacklist(token));
     }

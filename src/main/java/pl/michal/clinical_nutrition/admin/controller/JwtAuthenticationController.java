@@ -37,18 +37,7 @@ public class JwtAuthenticationController {
     @Autowired
     private final UserMapper userMapper;
 
-    @RequestMapping(value = "/api/user/refreshToken", method = RequestMethod.POST)
-    public ResponseEntity<?> refreshAuthenticationToken(@RequestBody JosDTO josDTO, @RequestHeader("Authorization") String token) throws Exception {
-        token=token.substring(7); //ucinam Bearer
-        final UserDetails userDetails = userService
-                .loadUserByUsername(jwtTokenUtil.getUsernameFromToken(token));
-        UserDTO userDTO = userMapper.toUserDTO(userService.findByUsername(jwtTokenUtil.getUsernameFromToken(token)));
-        final String newToken = jwtTokenUtil.generateToken(userDetails,josDTO.getId(), token);
-        userDTO.setToken(newToken);
-        
-        return ResponseEntity.status(HttpStatus.OK).body(userDTO);
-        //status(HttpStatus.OK).body(token+userMapper.toUserDTO((user)));
-    }
+
 
     @RequestMapping(value = "/api/user/logout", method = RequestMethod.POST)
     public ResponseEntity<?> logout(@RequestHeader("Authorization") String token) throws Exception {
@@ -59,19 +48,24 @@ public class JwtAuthenticationController {
 
     @RequestMapping(value = "/api/authenticate", method = RequestMethod.POST)
     public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws Exception {
-        authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
-        UserDTO userDTO = userMapper.toUserDTO(userService.findByUsername(authenticationRequest.getUsername()));
-
-        final UserDetails userDetails = userService
-                .loadUserByUsername(authenticationRequest.getUsername());
-
-
+        final UserDetails userDetails = userService.loadUserByUsername(authenticationRequest.getUsername());
         final String token = jwtTokenUtil.generateToken(userDetails);
-        userDTO.setToken(token);
-        userDTO.setPassword("");
-        System.out.println(jwtTokenUtil.getExpirationDateFromToken(token));
+        return ResponseEntity.status(HttpStatus.OK).body(token);
+    }
+
+    @RequestMapping(value = "/api/user/refreshToken", method = RequestMethod.POST)
+    public ResponseEntity<?> refreshAuthenticationToken(@RequestBody JosDTO josDTO, @RequestHeader("Authorization") String token) throws Exception {
+        token=token.substring(7); //ucinam Bearer
+        final UserDetails userDetails = userService.loadUserByUsername(jwtTokenUtil.getUsernameFromToken(token),josDTO.getId());
+        final String newToken = jwtTokenUtil.generateToken(userDetails,josDTO.getId(), token);
+        return ResponseEntity.status(HttpStatus.OK).body(newToken);
+    }
+    @RequestMapping(value = "/api/user/getCurrentUser", method = RequestMethod.POST)
+    public ResponseEntity<?> getCurrentUser(@RequestHeader("Authorization") String token) throws Exception {
+        token=token.substring(7); //ucinam Bearer
+        UserDTO userDTO = userMapper.toUserDTO(userService.findByUsername(jwtTokenUtil.getUsernameFromToken(token)));
+        userDTO.setPassword(null);
         return ResponseEntity.status(HttpStatus.OK).body(userDTO);
-                //status(HttpStatus.OK).body(token+userMapper.toUserDTO((user)));
     }
 
     private void authenticate(String username, String password) throws Exception {

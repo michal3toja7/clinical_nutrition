@@ -19,5 +19,4 @@ public class UserDTO {
     private boolean zablokowany;
     private Date wygasniecie_hasla;
     private boolean administrator;
-    private String token;
 }
