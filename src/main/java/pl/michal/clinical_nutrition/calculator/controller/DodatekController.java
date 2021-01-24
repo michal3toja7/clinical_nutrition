@@ -33,13 +33,10 @@ public class DodatekController {
 
     @PostMapping
     @PreAuthorize("hasAuthority('Premission1003') or hasRole('ADMIN')")
-    public ResponseEntity<List<DodatekDTO>> create(@RequestBody List<DodatekDTO> dodatekDTOS) {
-        for(DodatekDTO dodatekDTO : dodatekDTOS) {
+    public ResponseEntity<DodatekDTO> create(@RequestBody DodatekDTO dodatekDTO) {
             dodatekService.save(dodatekMapper.toDodatek(dodatekDTO));
-        }
 
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(dodatekDTOS);
+        return ResponseEntity.status(HttpStatus.CREATED).body(dodatekDTO);
     }
 
     @GetMapping("/{id}")

@@ -1,11 +1,15 @@
 package pl.michal.clinical_nutrition.admin.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 
 @Entity
 @Table (name = "JOS", schema = "app")
